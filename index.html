@@ -656,12 +656,14 @@
       gap: 12px;
     }
 
-    .expert-icon {
-      width: 36px; height: 36px;
+    .expert-photo {
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex: 0 0 36px;
+      object-fit: cover;
+      object-position: center top;
+      flex: 0 0 44px;
+      border: 2px solid rgba(255,255,255,0.4);
     }
 
     .expert-text { color: white; }
@@ -839,7 +841,9 @@
         </div>
 
         <div class="expert-banner" aria-label="Expert contributor">
-          <div class="expert-icon" aria-hidden="true">🩺</div>
+          <img src="https://www.madfesderm.com/wp-content/uploads/2023/04/portrait-of-Francesca-J.-Fusco.jpg"
+               alt="Dr. Francesca Fusco"
+               class="expert-photo">
           <div class="expert-text">
             <div class="expert-label">Expert contributor</div>
             <div class="expert-name">Dr. Francesca Fusco</div>
