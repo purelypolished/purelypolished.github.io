@@ -3,314 +3,746 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>The Ultimate Hair Care Guide</title>
+  <title>The Ultimate Hair Care Guide | PurelyPolished</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#f6f7f9;
-      --card:#ffffff;
-      --muted:#6b7280;
-      --accent:#0ea5a4;
-      --accent-2:#06b6d4;
-      --shadow: 0 6px 18px rgba(15,23,42,0.08);
-      --radius:12px;
-      --max-width:900px;
-      --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    /* ── Design Tokens ── */
+    :root {
+      --bg: #FAF8F5;
+      --card: #FFFFFF;
+      --surface: #F5F2EE;
+      --border: #EAE5DD;
+      --text: #1A1410;
+      --text-secondary: #5C5650;
+      --accent: #0D9488;
+      --accent-light: #CCFBF1;
+      --accent-dark: #0A7A70;
+      --gold: #C4975A;
+      --shadow-sm: 0 2px 8px rgba(26,20,16,0.06);
+      --shadow-md: 0 8px 32px rgba(26,20,16,0.09);
+      --shadow-lg: 0 20px 60px rgba(26,20,16,0.12);
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --max-width: 960px;
+      --font-display: 'Cormorant Garant', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
     }
 
-    html,body{
-      height:100%;
-      margin:0;
-      font-family:var(--font-sans);
-      background:linear-gradient(180deg, #f8fafc 0%, var(--bg) 100%);
-      color:#0f172a;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
 
-    .container{
-      max-width:var(--max-width);
-      margin:48px auto;
-      padding:28px;
+    /* ── Reading Progress Bar ── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+      z-index: 1000;
+      transition: width 0.1s linear;
+      border-radius: 0 2px 2px 0;
     }
 
-    .card{
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      display:grid;
-      grid-template-columns: 1fr 320px;
-      gap:28px;
-      align-items:start;
-      padding:28px;
+    /* ── Site Header ── */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 248, 245, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
     }
 
-    /* Responsive */
-    @media (max-width:880px){
-      .card{ grid-template-columns: 1fr; padding:20px; }
-      .meta-right{ order: -1; }
+    @media (max-width: 600px) {
+      .site-header { padding: 0 16px; }
     }
 
-    /* Left column (article) */
-    .article-header{
-      display:flex;
-      gap:16px;
-      align-items:flex-start;
+    .site-header-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .badges{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-bottom:10px;
+    .site-name {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.01em;
+      text-decoration: none;
     }
 
-    .badge{
-      background:#eef2f7;
-      color:var(--muted);
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      letter-spacing:0.2px;
+    .site-nav {
+      display: flex;
+      gap: 24px;
+      align-items: center;
     }
 
-    h1{
-      margin:0 0 8px 0;
-      font-size:28px;
-      line-height:1.15;
-      letter-spacing:-0.2px;
+    .site-nav a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
     }
 
-    .byline{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      color:var(--muted);
-      font-size:14px;
+    .site-nav a:hover { color: var(--accent); }
+
+    /* ── Main Layout ── */
+    .container {
+      max-width: var(--max-width);
+      margin: 48px auto 80px;
+      padding: 0 28px;
     }
 
-    .avatar{
-      width:44px;
-      height:44px;
-      border-radius:50%;
-      background:linear-gradient(135deg,var(--accent),var(--accent-2));
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      color:white;
-      font-weight:600;
-      font-size:14px;
-      flex:0 0 44px;
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 40px;
+      align-items: start;
     }
 
-    .meta-row{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      margin-top:8px;
-      color:var(--muted);
-      font-size:13px;
+    /* Prevent article column from overflowing grid on narrow screens */
+    .layout > article {
+      min-width: 0;
     }
 
-    .hero{
-      margin:18px 0 22px 0;
-      border-radius:10px;
-      overflow:hidden;
-      box-shadow:0 8px 20px rgba(2,6,23,0.06);
+    /* ── Responsive ── */
+
+    /* Tablet */
+    @media (max-width: 860px) {
+      .layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .meta-sidebar {
+        position: static; /* don't stick on tablet/mobile */
+        order: 2;         /* always render after the article */
+      }
+      .container { margin: 24px auto 60px; padding: 0 20px; }
     }
 
-    .hero img{
-      width:100%;
-      height:260px;
-      object-fit:cover;
-      display:block;
+    /* Mobile */
+    @media (max-width: 600px) {
+      .site-nav { display: none; } /* hide nav links — too cramped */
+
+      .container { padding: 0 16px; margin: 16px auto 48px; }
+
+      h1 { font-size: 30px; margin-bottom: 20px; }
+
+      .byline { gap: 12px; padding: 14px 0; }
+      .byline-detail { flex-wrap: wrap; gap: 6px; }
+
+      .hero img { height: 200px; }
+
+      .section-title { font-size: 22px; margin: 32px 0 12px; }
+
+      blockquote { padding: 20px 20px 18px 22px; }
+      blockquote p, blockquote cite { font-size: 17px; }
+
+      .article-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .copy-btn { width: 100%; justify-content: center; }
+
+      /* Sidebar as horizontal scroll on mobile */
+      .sidebar-card {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(200px, 1fr));
+        overflow: visible;   /* reset base overflow:hidden so x-scroll works */
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        border-radius: var(--radius-md);
+      }
+
+      .sidebar-section {
+        scroll-snap-align: start;
+        border-bottom: none;
+        border-right: 1px solid var(--border);
+        min-width: 200px;
+      }
+
+      .sidebar-section:last-child { border-right: none; }
+
+      .expert-banner { margin-top: 12px; }
+
+      .content { font-size: 15.5px; }
     }
 
-    .content{
-      font-size:16px;
-      line-height:1.7;
-      color:#0b1220;
+    /* Very small phones */
+    @media (max-width: 380px) {
+      h1 { font-size: 24px; line-height: 1.15; }
+      .site-name { font-size: 16px; }
+      .avatar { width: 36px; height: 36px; flex: 0 0 36px; font-size: 12px; }
+      .byline { gap: 10px; padding: 12px 0; }
+      .byline-name { font-size: 13px; }
+      .byline-detail { font-size: 12px; gap: 6px; }
+      .read-badge { font-size: 11px; padding: 2px 8px; }
+      .content { font-size: 15px; line-height: 1.7; }
+      .section-title { font-size: 19px; padding-left: 12px; margin: 28px 0 10px; }
+      blockquote { padding: 16px 14px 14px 16px; margin: 20px 0; }
+      blockquote::before { font-size: 80px; top: -4px; left: 8px; }
+      blockquote p, blockquote cite { font-size: 15px; }
+      .hero img { height: 170px; }
+      .badge { font-size: 10px; padding: 4px 10px; }
+      .container { padding: 0 12px; margin: 12px auto 40px; }
+      .article-header { margin-bottom: 24px; }
+      .tip-text { font-size: 12px; }
+      .meta-row { font-size: 13px; }
+      .expert-name { font-size: 13px; }
+      .copy-btn { font-size: 12px; padding: 9px 14px; }
     }
 
-    .content p{ margin:0 0 14px 0; }
+    /* ── Article Header ── */
+    .article-header { margin-bottom: 32px; }
 
-    .section-title{
-      margin:18px 0 8px 0;
-      font-weight:700;
-      font-size:18px;
-      color:#0b1220;
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
     }
 
-    blockquote{
-      margin:14px 0;
-      padding:14px 18px;
-      background:#f1f8f7;
-      border-left:4px solid var(--accent);
-      border-radius:8px;
-      color:#064e4b;
-      font-style:italic;
+    .badge {
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-bottom: none;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
     }
 
-    ul{
-      margin:0 0 14px 18px;
-      padding:0;
+    .badge:hover {
+      background: var(--accent);
+      color: white;
+      border-bottom: none;
     }
 
-    li{
-      margin:8px 0;
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 52px);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 24px;
     }
 
-    /* Right column (meta / stats) */
-    .meta-right{
-      background:linear-gradient(180deg,#ffffff,#fbfdff);
-      border-radius:10px;
-      padding:18px;
-      box-shadow:0 6px 16px rgba(2,6,23,0.04);
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      align-self:start;
+    .byline {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
     }
 
-    .meta-item{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      color:var(--muted);
-      font-size:14px;
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--gold));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 15px;
+      flex: 0 0 48px;
+      box-shadow: 0 0 0 3px white, 0 0 0 4.5px var(--border);
     }
 
-    .read-time{
-      background:#eef9f9;
-      color:#065f5b;
-      padding:6px 10px;
-      border-radius:999px;
-      font-weight:600;
-      font-size:13px;
+    .byline-meta { display: flex; flex-direction: column; gap: 3px; }
+
+    .byline-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
     }
 
-    .share{
-      display:flex;
-      gap:8px;
+    .byline-detail {
+      font-size: 13px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    .tag-list{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
+    .read-badge {
+      background: var(--surface);
+      color: var(--accent-dark);
+      font-weight: 600;
+      font-size: 12px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
     }
 
-    .tag{
-      background:#f3f6fb;
-      color:#0b3a66;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:13px;
+    /* ── Hero Image ── */
+    .hero {
+      margin: 28px 0 36px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      background: var(--surface);
+      line-height: 0; /* collapse gap under img */
     }
 
-    footer.article-footer{
-      margin-top:20px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      color:var(--muted);
-      font-size:13px;
+    .hero img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      display: block;
     }
 
-    .cta{
-      background:var(--accent);
-      color:white;
-      padding:10px 14px;
-      border-radius:10px;
-      font-weight:600;
-      text-decoration:none;
-      font-size:14px;
+    .hero figcaption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 40px 16px 12px;
+      background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%);
+      color: rgba(255,255,255,0.85);
+      font-size: 12px;
+      letter-spacing: 0.03em;
+      line-height: 1.4;
+      /* Only show when the image has loaded */
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .hero.img-loaded figcaption { opacity: 1; }
+
+    /* ── Article Body ── */
+    .content {
+      font-size: 16.5px;
+      line-height: 1.78;
+      color: #241E19;
+    }
+
+    .content p { margin-bottom: 20px; }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(20px, 5vw, 26px);
+      font-weight: 700;
+      color: var(--text);
+      margin: 40px 0 14px;
+      padding-left: 16px;
+      border-left: 3px solid var(--accent);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      scroll-margin-top: 72px; /* clear the sticky header */
+    }
+
+    #article-title {
+      scroll-margin-top: 72px;
+    }
+
+    /* ── Blockquote ── */
+    blockquote {
+      position: relative;
+      margin: 32px 0;
+      padding: 28px 28px 24px 32px;
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    blockquote::before {
+      content: '\201C';
+      font-family: var(--font-display);
+      font-size: 120px;
+      line-height: 1;
+      color: var(--accent);
+      opacity: 0.15;
+      position: absolute;
+      top: -8px;
+      left: 12px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    blockquote p, blockquote cite {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 19px;
+      line-height: 1.55;
+      color: var(--text);
+      position: relative;
+      z-index: 1;
+    }
+
+    blockquote cite {
+      display: block;
+      margin-top: 10px;
+      font-size: 13px;
+      font-style: normal;
+      font-family: var(--font-body);
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Lists ── */
+    ul {
+      margin: 0 0 20px 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      padding: 8px 0 8px 24px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+      font-size: 15px;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    li:last-child { border-bottom: none; }
+
+    li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 18px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.6;
+    }
+
+    li strong { color: var(--accent-dark); font-weight: 600; }
+
+    /* ── Links ── */
+    a {
+      color: var(--accent-dark);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .content a {
+      border-bottom: 1px solid var(--accent-light);
+    }
+
+    .content a:hover {
+      color: var(--accent-dark);
+      border-bottom-color: var(--accent);
+    }
+
+    /* ── Article Footer ── */
+    .article-footer {
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .tag-footer {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .tag-footer span {
+      font-size: 12px;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .tag-pill {
+      background: var(--surface);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      transition: background 0.2s, border-color 0.2s;
+      cursor: default;
+    }
+
+    .tag-pill:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent-dark);
+    }
+
+    /* ── Copy Button ── */
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--text);
+      color: white;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      font-size: 13px;
+      font-family: var(--font-body);
       border: none;
       cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.15s;
     }
 
-    /* copy button variant */
-    .copy-btn{
-      background:var(--accent);
-      color:white;
-      padding:10px 14px;
-      border-radius:10px;
-      font-weight:600;
-      font-size:14px;
-      border: none;
+    .copy-btn:hover { background: var(--accent); transform: translateY(-1px); }
+    .copy-btn:disabled { opacity: 0.65; cursor: default; transform: none; }
+
+    .visually-hidden {
+      position: absolute; width: 1px; height: 1px; padding: 0;
+      margin: -1px; overflow: hidden; clip: rect(0 0 0 0);
+      white-space: nowrap; border: 0;
+    }
+
+    /* ── Sidebar ── */
+    .meta-sidebar {
+      position: sticky;
+      top: 74px;
+    }
+
+    .sidebar-card {
+      background: var(--card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .sidebar-section {
+      padding: 20px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-section:last-child { border-bottom: none; }
+
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .meta-row:last-child { margin-bottom: 0; }
+    .meta-key { color: var(--text-secondary); }
+    .meta-val { font-weight: 600; color: var(--text); }
+
+    .read-time-badge {
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    /* ── Quick Tips ── */
+    .tip-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .tip-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .tip-num {
+      flex: 0 0 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    .tip-text {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    /* ── Sidebar Tags ── */
+    .sidebar-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .sidebar-tag {
+      background: var(--surface);
+      color: var(--text);
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      transition: background 0.2s, border-color 0.2s;
       cursor: pointer;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
+      text-decoration: none;
+      border-bottom: none;
     }
 
-    .copy-btn:disabled{
-      opacity:0.7;
-      cursor:default;
+    .sidebar-tag:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent-dark);
+      border-bottom: none;
     }
 
-    /* small helper */
-    .muted{ color:var(--muted); font-size:13px; }
-
-    /* visually-hidden for live region */
-    .visually-hidden{
-      position:absolute;
-      width:1px;
-      height:1px;
-      padding:0;
-      margin:-1px;
-      overflow:hidden;
-      clip:rect(0 0 0 0);
-      white-space:nowrap;
-      border:0;
+    /* ── Expert Banner ── */
+    .expert-banner {
+      background: linear-gradient(135deg, var(--accent) 0%, #0B8279 100%);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin: 28px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
+
+    .expert-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex: 0 0 36px;
+    }
+
+    .expert-text { color: white; }
+    .expert-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.75; margin-bottom: 2px; }
+    .expert-name { font-size: 14px; font-weight: 600; }
+
+    /* ── Fade-in animation ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .layout > * {
+      animation: fadeUp 0.55s ease both;
+    }
+
+    .layout > *:nth-child(2) { animation-delay: 0.1s; }
   </style>
 </head>
 <body>
+
+  <!-- Reading progress bar -->
+  <div id="progress-bar" role="progressbar" aria-hidden="true"></div>
+
+  <!-- Sticky site header -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="#" class="site-name">PurelyPolished</a>
+      <nav class="site-nav" aria-label="Site navigation">
+        <a href="#products-section">Products</a>
+        <a href="#article-title">About</a>
+      </nav>
+    </div>
+  </header>
+
   <main class="container" role="main">
-    <article class="card" aria-labelledby="article-title">
-      <!-- Left: Article content -->
-      <div>
-        <div class="article-header">
-          <div style="flex:1">
-            <div class="badges" aria-hidden="true">
-              <span class="badge">Leave-in treatments</span>
-              <span class="badge">Hair growth</span>
-            </div>
+    <div class="layout">
 
-            <h1 id="article-title">The Ultimate Hair Care Guide</h1>
+      <!-- ── Left: Article ── -->
+      <article aria-labelledby="article-title">
 
-            <div class="byline" aria-label="Author and publish info">
-              <div class="avatar" aria-hidden="true">IS</div>
-              <div>
-                <div style="font-weight:700">Isabella Grant</div>
-                <div class="muted">Published 1 March 2026 · <span class="read-time" style="display:inline-block; margin-left:8px;">4 min read</span></div>
-              </div>
-            </div>
+        <header class="article-header">
+          <div class="badge-row" aria-hidden="true">
+            <a href="#section-deep-care" class="badge">Leave-in treatments</a>
+            <a href="#section-scalp" class="badge">Hair growth</a>
+          </div>
 
-            <div class="meta-row" style="margin-top:12px;">
-              <div class="muted">Expert: Dr. Francesca Fusco</div>
+          <h1 id="article-title">The Ultimate Hair Care Guide</h1>
+
+          <div class="byline" aria-label="Author and publish info">
+            <div class="avatar" aria-hidden="true">IS</div>
+            <div class="byline-meta">
+              <span class="byline-name">Isabella Grant</span>
+              <span class="byline-detail">
+                Published 1 March 2026
+                <span class="read-badge">4 min read</span>
+              </span>
             </div>
           </div>
-        </div>
+        </header>
 
         <figure class="hero" role="img" aria-label="Person with long blonde hair">
-          <!-- Replace src with your image path -->
           <img src="blond-hair.png" alt="Person with long blonde hair blowing in the wind while wearing sunglasses and a denim jacket">
+          <figcaption>Photo: Editorial hair care feature</figcaption>
         </figure>
 
         <div class="content">
-          <p>Life as an adult is full. You’re building a career, maintaining relationships, staying active, managing stress, and somehow trying to look put together through it all. In the middle of that busy rhythm, hair care can either feel overwhelming or completely forgotten. The truth is, healthy hair doesn’t require a complicated 12-step routine. It requires consistency, smart product choices, and a little attention to your scalp and daily habits. With the right approach, you can reduce breakage, control frizz, manage oil, and protect against thinning or heat damage — all without spending hours in front of the mirror.</p>
+          <p>Life as an adult is full. You're building a career, maintaining relationships, staying active, managing stress, and somehow trying to look put together through it all. In the middle of that busy rhythm, hair care can either feel overwhelming or completely forgotten. The truth is, healthy hair doesn't require a complicated 12-step routine. It requires consistency, smart product choices, and a little attention to your scalp and daily habits. With the right approach, you can reduce breakage, control frizz, manage oil, and protect against thinning or heat damage — all without spending hours in front of the mirror.</p>
 
-          <h3 class="section-title">Start With Your Scalp</h3>
+          <h3 id="section-scalp" class="section-title">Start With Your Scalp</h3>
           <p>For women, everything starts at the scalp. Your scalp is skin, and just like the skin on your face, it needs proper cleansing and circulation to stay healthy. Washing your hair two to four times a week works well for most people, depending on oil production and activity level. When you shampoo, take a full minute to massage your scalp rather than quickly scrubbing and rinsing. A tool like the <a href="https://amzn.to/4b2SFt5">Umberto Giannini Stimulating Scalp Massager</a> can help stimulate circulation while gently lifting buildup. If you use styling products regularly, clarifying once every few weeks keeps the scalp balanced and prevents dullness.</p>
-          <blockquote>“It is essential to give our scalp as much TLC as we give to our skin because after all, scalp is skin” — Dr. Francesca Fusco</blockquote>
+
+          <blockquote>
+            "It is essential to give our scalp as much TLC as we give to our skin because after all, scalp is skin"
+            <cite>— Dr. Francesca Fusco</cite>
+          </blockquote>
 
           <h3 class="section-title">Build a Routine That Works</h3>
-          <p>Conditioning is where many people either overdo it or skip it entirely. Conditioner should focus on the mid-lengths and ends, where dryness and damage show up first. If shine and softness are your goal, <a href="https://amzn.to/4b3Cmw0">L'Oreal Paris Glossing Conditioner</a> helps smooth and enhance natural luster. For lighter shades, blonde, or silver tones, <a href="https://amzn.to/3Nca1fa">L'Oreal Paris Silver Care Conditioner</a> can help maintain brightness and reduce dullness. If your hair feels dry, brittle, or stressed from coloring or heat, <a href="https://amzn.to/4rb3QWC">Alterna Anti-Aging Conditioner</a> offers deeper nourishment. For those who want lightweight hydration without heaviness, <a href="https://amzn.to/4rMlr8m">Garnier Honey Water Conditioner</a> provides moisture that won’t weigh hair down. And if you’re maintaining cool-toned color, <a href="https://amzn.to/4cYaDiU">Matrix Protecting Blue Toning Conditioner</a> helps keep unwanted brassiness under control while conditioning at the same time.</p>
+          <p>Conditioning is where many people either overdo it or skip it entirely. Conditioner should focus on the mid-lengths and ends, where dryness and damage show up first. If shine and softness are your goal, <a href="https://amzn.to/4b3Cmw0">L'Oreal Paris Glossing Conditioner</a> helps smooth and enhance natural luster. For lighter shades, blonde, or silver tones, <a href="https://amzn.to/3Nca1fa">L'Oreal Paris Silver Care Conditioner</a> can help maintain brightness and reduce dullness. If your hair feels dry, brittle, or stressed from coloring or heat, <a href="https://amzn.to/4rb3QWC">Alterna Anti-Aging Conditioner</a> offers deeper nourishment. For those who want lightweight hydration without heaviness, <a href="https://amzn.to/4rMlr8m">Garnier Honey Water Conditioner</a> provides moisture that won't weigh hair down. And if you're maintaining cool-toned color, <a href="https://amzn.to/4cYaDiU">Matrix Protecting Blue Toning Conditioner</a> helps keep unwanted brassiness under control while conditioning at the same time.</p>
 
-          <h3 class="section-title">Deep Care and Treatments</h3>
+          <h3 id="section-deep-care" class="section-title">Deep Care and Treatments</h3>
           <p>Beyond regular washing and conditioning, strengthening treatments make a visible difference, especially if you color your hair or use heat tools often. Hair bonds weaken over time due to chemical processing and high temperatures. <a href="https://amzn.to/3OWmT9E">LIW pH Plex Bonding Treatment</a> helps reinforce those internal bonds, reducing breakage and improving resilience. If frizz is your main concern, particularly in humid weather, <a href="https://amzn.to/4cpXsXP">VIRTUE Anti-Frizz Treatment</a> smooths flyaways and adds polish without making hair stiff or greasy. Incorporating a deep treatment once a week can restore softness and help prevent long-term damage.</p>
 
           <h3 class="section-title">Heat and Styling Protection</h3>
@@ -318,17 +750,17 @@
 
           <h3 class="section-title">Common Concerns and What to Do</h3>
           <p>Common concerns for women in this age group include thinning, frizz, oily roots, and dryness from coloring. Thinning can be linked to stress, hormones, tight hairstyles, or nutritional gaps. Reducing constant tension from tight ponytails and incorporating scalp massage can support healthier growth conditions. Frizz usually signals dehydration, so consistent conditioning and smoothing treatments help. Oily scalps benefit from balanced washing rather than aggressive daily shampooing, which can trigger even more oil production. Color-treated hair simply requires gentler care and regular moisture to maintain vibrancy.</p>
-          
+
           <h3 class="section-title">Washing Smart for Men</h3>
           <p>For men, hair care is often simpler but just as important. Washing three to five times a week with a gentle shampoo is usually sufficient, especially if styling products are used daily. Massaging the scalp thoroughly during washing helps maintain circulation and remove buildup, and tools like the <a href="https://amzn.to/4b2SFt5">Umberto Giannini Stimulating Scalp Massager</a> are just as effective for shorter styles. Conditioner should not be skipped, even on short hair, as it prevents dryness and brittleness. A lightweight option such as <a href="https://amzn.to/4rMlr8m">Garnier Honey Water Conditioner</a> keeps hair soft without flattening it.</p>
 
           <h3 class="section-title">Styling Without Damage</h3>
           <p>Styling practices matter for men as well. Heavy gels and waxes can create buildup and scalp congestion if not washed out properly. Choosing lighter styling creams and cleansing thoroughly before bed keeps hair healthier long term. For textured or curl-defined looks, a <a href="https://amzn.to/4sjNQT0">Magic Barber Sponge Twist Brush</a> helps shape curls without excessive product use or heat. When it comes to thinning or receding hairlines, which commonly begin in the twenties or thirties, early care makes a difference. Maintaining scalp health, managing stress, and avoiding constant tight hats or friction can help preserve density. If thinning appears sudden or severe, consulting a professional is wise.</p>
-          
+
           <h3 class="section-title">Healthy Hair</h3>
           <p>Across both women and men, nutrition plays a larger role than many realize. Hair is made primarily of protein, so adequate intake of protein-rich foods supports strength and growth. Iron, omega-3 fatty acids, and overall hydration also contribute to shine and resilience. No product can fully compensate for poor nutrition or chronic stress, so healthy lifestyle habits are part of any effective hair routine.</p>
-          
-          <h3 class="section-title">Products We Mentioned</h3>
+
+          <h3 id="products-section" class="section-title">Products We Mentioned</h3>
           <ul>
             <li><strong>Conditioners</strong> — <a href="https://amzn.to/4b3Cmw0">L'Oreal Paris Glossing Conditioner</a>, <a href="https://amzn.to/3Nca1fa">L'Oreal Paris Silver Care Conditioner</a>, <a href="https://amzn.to/4rb3QWC">Alterna Anti-Aging Conditioner</a>, <a href="https://amzn.to/4rMlr8m">Garnier Honey Water Conditioner</a>, <a href="https://amzn.to/4cYaDiU">Matrix Protecting Blue Toning Conditioner</a>, <a href="https://amzn.to/3N0JQrN">MONDAY SMOOTH Duo</a></li>
             <li><strong>Scalp Products</strong> — <a href="https://amzn.to/4b2SFt5">Umberto Giannini Stimulating Scalp Massager</a>, <a href="https://amzn.to/4sjNQT0">Magic Barber Sponge Twist Brush</a></li>
@@ -338,66 +770,111 @@
           <h3 class="section-title">Conclusion</h3>
           <p>Ultimately, great hair is less about perfection and more about consistency. You do not need dozens of products or complicated rituals. You need thoughtful cleansing, proper conditioning, occasional strengthening treatments, moderate heat use, and attention to your scalp.</p>
 
-          <p style="margin-top:18px;">As an adult, life changes quickly, but a steady, realistic hair care routine will carry you through every stage. When you treat your hair with patience and care, it reflects that effort back in shine, strength, and confidence.
-</p>
+          <p>As an adult, life changes quickly, but a steady, realistic hair care routine will carry you through every stage. When you treat your hair with patience and care, it reflects that effort back in shine, strength, and confidence.</p>
 
           <footer class="article-footer" aria-label="Article footer">
-            <div class="muted">Tags: <span style="color:#0b1220; font-weight:600;">hair</span>, <span style="color:#0b1220; font-weight:600;">scalp</span></div>
-
-            <!-- Replaced the anchor share link with a copy-to-clipboard button -->
+            <div class="tag-footer">
+              <span>Tags:</span>
+              <span class="tag-pill">hair</span>
+              <span class="tag-pill">scalp</span>
+            </div>
             <div>
-              <button id="copyLinkBtn" class="copy-btn" aria-describedby="copyStatus">Copy link</button>
+              <button id="copyLinkBtn" class="copy-btn" aria-describedby="copyStatus">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                Copy link
+              </button>
               <span id="copyStatus" class="visually-hidden" aria-live="polite"></span>
             </div>
           </footer>
         </div>
-      </div>
+      </article>
 
-      <!-- Right: Meta / sidebar -->
-      <aside class="meta-right" aria-label="Article metadata">
-        <div style="display:flex;flex-direction:column;gap:6px;">
-          <div class="meta-item">
-            <div class="muted">Author</div>
-            <div style="font-weight:700">Isabella Grant</div>
+      <!-- ── Right: Sidebar ── -->
+      <aside class="meta-sidebar" aria-label="Article metadata">
+        <div class="sidebar-card">
+
+          <div class="sidebar-section">
+            <div class="sidebar-label">About this article</div>
+            <div class="meta-row">
+              <span class="meta-key">Author</span>
+              <span class="meta-val">Isabella Grant</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-key">Published</span>
+              <span class="meta-val">1 March 2026</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-key">Reading time</span>
+              <span class="read-time-badge">4 min</span>
+            </div>
           </div>
 
-          <div class="meta-item">
-            <div class="muted">Published</div>
-            <div>1 March 2026</div>
+          <div class="sidebar-section">
+            <div class="sidebar-label">Quick tips</div>
+            <div class="tip-list">
+              <div class="tip-item">
+                <div class="tip-num">1</div>
+                <div class="tip-text">Focus on scalp health first — it's the foundation for everything.</div>
+              </div>
+              <div class="tip-item">
+                <div class="tip-num">2</div>
+                <div class="tip-text">Don't overwash — 2–4 times a week is ideal for most hair types.</div>
+              </div>
+              <div class="tip-item">
+                <div class="tip-num">3</div>
+                <div class="tip-text">Always use heat protection before styling tools.</div>
+              </div>
+            </div>
           </div>
 
-          <div class="meta-item">
-            <div class="muted">Reading time</div>
-            <div class="read-time">4 min</div>
+          <div class="sidebar-section">
+            <div class="sidebar-label">Categories</div>
+            <div class="sidebar-tags">
+              <a href="#section-scalp" class="sidebar-tag">Scalp treatments</a>
+              <a href="#section-scalp" class="sidebar-tag">Hair growth</a>
+              <a href="#section-deep-care" class="sidebar-tag">Leave-in treatments</a>
+            </div>
           </div>
+
         </div>
 
-        <hr style="border:none;border-top:1px solid #eef2f7;margin:8px 0;">
-
-        <div>
-          <div class="muted" style="margin-bottom:8px;">Quick tips</div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="font-size:14px;">• Focus on Scalp Health.</div>
-            <div style="font-size:14px;">• Don’t Overwash Your Hair.</div>
-            <div style="font-size:14px;">• Protect Your Hair from Heat.</div>
-          </div>
-        </div>
-
-        <hr style="border:none;border-top:1px solid #eef2f7;margin:8px 0;">
-
-        <div>
-          <div class="muted" style="margin-bottom:8px;">Categories</div>
-          <div class="tag-list">
-            <span class="tag">Scalp treatments</span>
-            <span class="tag">Hair growth</span>
-            <span class="tag">Leave-in treatments</span>
+        <div class="expert-banner" aria-label="Expert contributor">
+          <div class="expert-icon" aria-hidden="true">🩺</div>
+          <div class="expert-text">
+            <div class="expert-label">Expert contributor</div>
+            <div class="expert-name">Dr. Francesca Fusco</div>
           </div>
         </div>
       </aside>
-    </article>
+
+    </div>
   </main>
 
   <script>
+    // Show hero figcaption only when image has loaded
+    const heroImg = document.querySelector('.hero img');
+    const heroFig = heroImg && heroImg.closest('.hero');
+    if (heroImg && heroFig) {
+      const reveal = () => heroFig.classList.add('img-loaded');
+      if (heroImg.complete && heroImg.naturalWidth) {
+        reveal();
+      } else {
+        heroImg.addEventListener('load', reveal);
+        heroImg.addEventListener('error', reveal); // show overlay even if image fails
+      }
+    }
+
+    // Reading progress bar
+    const bar = document.getElementById('progress-bar');
+    function updateProgress() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      bar.style.width = Math.min(pct, 100) + '%';
+    }
+    window.addEventListener('scroll', updateProgress, { passive: true });
+
+    // Copy link button
     (function () {
       const btn = document.getElementById('copyLinkBtn');
       const status = document.getElementById('copyStatus');
@@ -406,7 +883,6 @@
         if (navigator.clipboard && navigator.clipboard.writeText) {
           return navigator.clipboard.writeText(text);
         }
-        // Fallback for older browsers
         const ta = document.createElement('textarea');
         ta.value = text;
         ta.style.position = 'fixed';
@@ -426,20 +902,18 @@
       btn.addEventListener('click', async () => {
         const pageUrl = location.href;
         btn.disabled = true;
-        const originalLabel = btn.textContent;
+        const originalLabel = btn.innerHTML;
         try {
           await copyToClipboard(pageUrl);
           btn.textContent = 'Link copied!';
           status.textContent = 'Page link copied to clipboard.';
         } catch (err) {
           btn.textContent = 'Copy failed';
-          status.textContent = 'Copy failed; the URL is shown so you can copy it manually.';
-          // Last resort: show prompt for manual copy
-          // eslint-disable-next-line no-alert
+          status.textContent = 'Copy failed; you can copy the URL manually.';
           window.prompt('Copy the URL below', pageUrl);
         } finally {
           setTimeout(() => {
-            btn.textContent = originalLabel;
+            btn.innerHTML = originalLabel;
             btn.disabled = false;
             status.textContent = '';
           }, 2000);
